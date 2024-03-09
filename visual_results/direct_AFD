@@ -1,0 +1,14 @@
+// direct_AFD
+digraph {
+	node [shape=circle]
+	node [style=filled]
+	node [color=lightblue2]
+	node [fontcolor=black]
+	edge [color=black]
+	edge [fontcolor=black]
+	edge [fontsize=20]
+	graph [rankdir=LR]
+	graph [size=17]
+	label=1
+	S0 [label=S0 shape=doublecircle]
+}
