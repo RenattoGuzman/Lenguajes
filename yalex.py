@@ -538,23 +538,3 @@ def StitchTogether(vest, patch, where, limit):
     where += len(patch) 
     limit += len(patch) - 1
     return vest, where, limit
-
-
-"""gary = '+'
-print('gary: ', gary)
-print('gary: ', str(ord(gary)))
-gary = "'" + str(ord(gary)) + "'"
-print('gary: ', gary)
-
-dummy = "Vex'ahlia Vessar"
-where = 10
-print('dummy: ', dummy)
-print('dummy: ', dummy[where:])
-for e in dummy:
-    print(' - ', e)
-married = 'de Rolo V'
-dummy, where = StitchTogether(dummy,married , where)
-print('dummy: ', dummy)
-print('dummy: ', dummy[where:])
-for e in dummy:
-    print(' - ', e)"""

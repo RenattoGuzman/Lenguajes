@@ -25,15 +25,9 @@ def compatible_follow_pos(state1, state2, tree):
 
     return f_1 == f_2
 
-    #print('   f_1: ', f_1)
-    #print('   f_2: ', f_2)
-    #print('   f_1 == f_2: ', f_1 == f_2)
-
-
 
 
 def direct_build(tree, sigma, postfix):
-    #print('Mortarion')
     #tree.post2()
     #print('Posición de aceptación: ', tree.searchByVal('#'))
     acceptance_pos = tree.searchByVal('#')
@@ -61,15 +55,7 @@ def direct_build(tree, sigma, postfix):
                 #print('   i: ', postfix[i])
                 if postfix[i] in sigma:
                     if (i+1) in e:
-                        #print(i+1, e)
-                        #print(tree.searchPos(i+1).val)
-                        #print(tree.searchPos(i+1).follow_pos)
-                        #acu.append(tree.searchPos(i+1).follow_pos)
-                        """temp_awedowed = tree.searchPos(i+1).follow_pos
-                        print("temp_awedowed: ", temp_awedowed)
-                        for e2 in temp_awedowed:
-                            if e2 not in acu:
-                                acu.append(e2)"""
+
                         acu = tree.searchPos(i+1).follow_pos
                         #print(acu)
 
@@ -103,25 +89,7 @@ def direct_build(tree, sigma, postfix):
                                         # entonces se pueden unir
                                         if compatible_follow_pos(acu, e2, tree):
                                             acu = e2                                    
-                            Dstates.append(acu)
-                            """for j in Dstates:
-                                if not ArrayInArray(acu, j):
-                                    #acu = j
-                                    Dstates.append(acu)
-                                else:
-                                    acu = j
-                        else:
-                            acu = next(s for s in Dstates if s == acu)"""
-                        # se crea la transición
-                        
-                        """if ArrayInArray(acu, e):
-                            #temp = [e, e, postfix[i]]
-                            # Osea que la transición es a si mismo
-                            temp = [e, postfix[i], e]
-                        else:
-                            #temp = [e, acu, postfix[i]]
-                            temp = [e, postfix[i], acu]"""
-                        
+                            Dstates.append(acu)                        
                         temp = [e, postfix[i], acu]
                         if temp not in Dtran:
                             Dtran.append(temp)
