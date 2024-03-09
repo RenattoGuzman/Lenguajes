@@ -166,7 +166,7 @@ class Node:
             if node is None:
                 return
             
-            dot.node(str(id(node)), label=f'{node.val}')
+            dot.node(str(id(node)), label=f'Value: {node.val}\nPosition: {node.pos}\nFirstPos: {node.first_pos}\nLastPos: {node.last_pos}\nFollowPos: {node.follow_pos}')
             
             if node.left:
                 traverse(node.left)

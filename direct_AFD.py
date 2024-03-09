@@ -48,14 +48,17 @@ def direct_build(tree, sigma, postfix):
     #while Marked != Dstates:
     #    e = next(s for s in Dstates if s not in Marked)
     for e in Dstates:
+        #print('e: ', e)
         if e not in Marked:
             Marked.append(e)
             # se obtiene el conjunto de estados alcanzables
             # con cada uno de los símbolos del regex
             #i = 0
             #while i < len(postfix):
+            # print('   postfix: ', postfix)
             for i in range(len(postfix)):
                 acu = []
+                #print('   i: ', postfix[i])
                 if postfix[i] in sigma:
                     if (i+1) in e:
                         #print(i+1, e)

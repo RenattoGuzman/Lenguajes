@@ -134,12 +134,35 @@ def simulation(AFD, string):
             bitacora += "Pos: " + str(pos) + "\n"
             bitacora += "Current state: " + current_state.name + "\n"
             bitacora += "Current char: " + string[pos] + "\n"
-            if string[pos] in current_state.transitions:
-                if current_state.transitions[string[pos]] != None:
-                    current_state = current_state.transitions[string[pos]]
-                    pos += 1
-                else:
-                    flag = False
+            t1 = string[pos]
+            t2 = str(ord(t1))
+            t3 = "'" + t1 + "'"
+            t4 = "'" + t2 + "'"
+            if t1 in current_state.transitions or t2 in current_state.transitions or t3 in current_state.transitions or t4 in current_state.transitions:
+                if t1 in current_state.transitions:
+                    if current_state.transitions[t1] != None:
+                        current_state = current_state.transitions[t1]
+                        pos += 1
+                    else:
+                        flag = False
+                elif t2 in current_state.transitions:
+                    if current_state.transitions[t2] != None:
+                        current_state = current_state.transitions[t2]
+                        pos += 1
+                    else:
+                        flag = False
+                elif t3 in current_state.transitions:
+                    if current_state.transitions[t3] != None:
+                        current_state = current_state.transitions[t3]
+                        pos += 1
+                    else:
+                        flag = False
+                elif t4 in current_state.transitions:
+                    if current_state.transitions[t4] != None:
+                        current_state = current_state.transitions[t4]
+                        pos += 1
+                    else:
+                        flag = False
             else:
                 flag = False
         elif pos == len(string) and current_state.isAccept:

@@ -174,7 +174,7 @@ def trans2(exp):        # el recorrido se hace de derecha a izquierda para evita
             if i < len(exp)-1:
                 t2 = exp[i+1]
                 if exp[i+1] == ')':
-                    print('here')
+                    #print('here')
                     j = i
                     while exp[j] != '(':
                         j -= 1
@@ -300,41 +300,41 @@ def symbol_check(exp):
     #symbols = ['*', '|', '(', ')']
     for i in range(len(exp)):
         e = exp[i]
-        print(e)
+        #print(e)
         if e == '*':
             if i == 0 or exp[i-1] == '|' or exp[i-1] == '(':
-                print('here1')
+                #print('here1')
                 flag = False
         elif e == '|':
             if i == 0 or exp[i-1] == '|' or exp[i-1] == '(' or i == len(exp)-1:
-                print('here2')
+                #print('here2')
                 flag = False
             else:
                 if exp[i+1] == '|' or exp[i+1] == ')' or exp[i+1] == '*' or exp[i+1] == '.' or exp[i+1] == '+' or exp[i+1] == '?':
                     flag = False
         elif e == '.':
             if i == 0 or exp[i-1] == '|' or exp[i-1] == '(' or i == len(exp)-1:
-                print('here3')
+                #print('here3')
                 flag = False
             else:
                 if exp[i+1] == '|' or exp[i+1] == ')' or exp[i+1] == '*' or exp[i+1] == '.' or exp[i+1] == '+' or exp[i+1] == '?':
-                    print('here4')
+                    #print('here4')
                     flag = False
         elif e == '(':
             if i == len(exp)-1:
-                print('here5')
+                #print('here5')
                 flag = False
             else:
                 if exp[i+1] == '|' or exp[i+1] == ')' or exp[i+1] == '*' or exp[i+1] == '.' or exp[i+1] == '+' or exp[i+1] == '?':
-                    print('here6')
+                    #print('here6')
                     flag = False
         elif e == '+':
             if i == 0 or exp[i-1] == '|' or exp[i-1] == '(':
-                print('here7')
+                #print('here7')
                 flag = False
         elif e == '?':
             if i == 0 or exp[i-1] == '|' or exp[i-1] == '(':
-                print('here8')
+                #print('here8')
                 flag = False
 
         
@@ -351,30 +351,30 @@ def symbol_check_2(exp):
         #print(e)
         if e == '*':
             if i == 0 or exp[i-1] == '|' or exp[i-1] == '(':
-                print('here1')
+                #print('here1')
                 flag = False
         elif e == '|':
             if i == 0 or exp[i-1] == '|' or exp[i-1] == '(' or i == len(exp)-1:
-                print('here2')
+                #print('here2')
                 flag = False
             else:
                 if exp[i+1] == '|' or exp[i+1] == ')' or exp[i+1] == '*' or exp[i+1] == '+' or exp[i+1] == '?':
                     flag = False
         elif e == '(':
             if i == len(exp)-1:
-                print('here5')
+                #print('here5')
                 flag = False
             else:
                 if exp[i+1] == '|' or exp[i+1] == ')' or exp[i+1] == '*' or exp[i+1] == '+' or exp[i+1] == '?':
-                    print('here6')
+                    #print('here6')
                     flag = False
         elif e == '+':
             if i == 0 or exp[i-1] == '|' or exp[i-1] == '(':
-                print('here7')
+                #print('here7')
                 flag = False
         elif e == '?':
             if i == 0 or exp[i-1] == '|' or exp[i-1] == '(':
-                print('here8')
+                #print('here8')
                 flag = False
 
         
@@ -486,7 +486,7 @@ def InfixToPostfix(exp):
             #print(type(exp))
             exp = flatten(exp)
             #print('Gruumsh the destroyer')
-            print(' '.join(str(e) for e in exp))
+            #print(' '.join(str(e) for e in exp))
             #print('Tiamat the ancient one')
             exp = readExp_2(exp)
             #exp = readExp_3(exp)
@@ -497,8 +497,8 @@ def InfixToPostfix(exp):
         else:
             exp = trans(exp)
             exp = readExp(exp)
-        print(isinstance(exp, list))
-        print('La expresion regular transformada es: ', ' '.join(str(e) for e in exp))
+        #print(isinstance(exp, list))
+        print('La expresion regular transformada es: ', ''.join(str(e) for e in exp))
         #print(exp)
         OpStack = []
         postfix = []

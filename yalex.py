@@ -13,161 +13,160 @@ def repeated_rule(r, l):
 
 
 # generar la gramatica a partir del archivo .yal
-def grammar(file):
-    with open(file, 'r') as f:
-        yal = f.read().splitlines()
-        let_rules = []
+def grammar(text):
+    yal = text.splitlines()
+    let_rules = []
 
-        for l in yal:
-            nl = l.strip()
+    for l in yal:
+        nl = l.strip()
 
-            if nl != '' and nl[0] != '#':
-                #print(nl)
-                if '(*' in nl:
-                    #print(nl.index('(*'))
-                    nl = nl[:nl.index('(*')]
-                    nl = nl.strip()
-                    #print(' - ', nl)
-                    if nl != '':
-                        let_rules.append(nl)
-                else:
+        if nl != '' and nl[0] != '#':
+            #print(nl)
+            if '(*' in nl:
+                #print(nl.index('(*'))
+                nl = nl[:nl.index('(*')]
+                nl = nl.strip()
+                #print(' - ', nl)
+                if nl != '':
                     let_rules.append(nl)
-        lets = []
-        rules = []
-        rulesFlag = False
-
-        for e in let_rules: 
-            if rulesFlag:
-                rules.append(e)
             else:
-                if e.startswith('rule'):
-                    rulesFlag = True
-                    #print('rules')
-                else:
-                    lets.append(e)
+                let_rules.append(nl)
+    lets = []
+    rules = []
+    rulesFlag = False
 
-        l = {} # let
-        r = {} # rules
+    for e in let_rules: 
+        if rulesFlag:
+            rules.append(e)
+        else:
+            if e.startswith('rule'):
+                rulesFlag = True
+                #print('rules')
+            else:
+                lets.append(e)
 
-        # diccionario de reglas de formato let
-        for let in lets:
+    l = {} # let
+    r = {} # rules
 
-            # separar la sentencia let en dos partes, la variable y el valor
-            let = let.replace("let ", "")
-            let = let.strip()
-            let = let.split("=")
+    # diccionario de reglas de formato let
+    for let in lets:
 
-            letVal = let[1].strip()
+        # separar la sentencia let en dos partes, la variable y el valor
+        let = let.replace("let ", "")
+        let = let.strip()
+        let = let.split("=")
 
-            # valor de la sentencia let en forma de arreglo
-            if letVal.startswith("[") and letVal.endswith("]"):
-                # si el valor arreglo tiene un rango
-                if "-" in letVal:
+        letVal = let[1].strip()
+
+        # valor de la sentencia let en forma de arreglo
+        if letVal.startswith("[") and letVal.endswith("]"):
+            # si el valor arreglo tiene un rango
+            if "-" in letVal:
+                letVal = letVal[1:-1]
+                #print(' - ', let ,' let interval value: ',letVal)
+
+                tempArray = []
+                lastIndex = 0
+                count = letVal.count("-")
+
+                for x in range(count):
+                    index = letVal.index("-", lastIndex)
+
+                    startA = letVal.index("'", lastIndex)
+                    endA = letVal.index("'", startA + 1)
+
+                    startB = letVal.index("'", index)
+                    endB = letVal.index("'", startB + 1)
+
+                    valA = letVal[startA + 1:endA]
+                    valB = letVal[startB + 1:endB]
+
+                    tempArray.append(valA + "-" + valB)
+
+                    lastIndex = endB + 1
+
+            # si el valor arreglo no tiene un rango, sino que
+            # es un arreglo de caracteres especificos
+            else:
+
+                #print(' - ', let ,' let array value: ',letVal)
+
+                testCount = letVal.count("'")
+                if testCount == 0:
+                    testCount = letVal.count('"')
+
+                if testCount > 2:
                     letVal = letVal[1:-1]
-                    #print(' - ', let ,' let interval value: ',letVal)
 
                     tempArray = []
-                    lastIndex = 0
-                    count = letVal.count("-")
+                    currentIndex = -1
+                    for x in range(len(letVal)):
+                        char = letVal[x]
 
-                    for x in range(count):
-                        index = letVal.index("-", lastIndex)
+                        if currentIndex > x:
+                            continue
+                        elif currentIndex == x:
+                            currentIndex = -1
 
-                        startA = letVal.index("'", lastIndex)
-                        endA = letVal.index("'", startA + 1)
+                        if char == "'":
+                            if currentIndex == -1:
+                                currentIndex = x
 
-                        startB = letVal.index("'", index)
-                        endB = letVal.index("'", startB + 1)
+                        elif currentIndex != -1:
+                            start = currentIndex + 1
+                            end = letVal.index("'", start)
 
-                        valA = letVal[startA + 1:endA]
-                        valB = letVal[startB + 1:endB]
+                            tempArray.append(letVal[start:end])
+                            currentIndex = end + 1
 
-                        tempArray.append(valA + "-" + valB)
-
-                        lastIndex = endB + 1
-
-                # si el valor arreglo no tiene un rango, sino que
-                # es un arreglo de caracteres especificos
                 else:
+                    letVal = letVal[1:-1]
 
-                    #print(' - ', let ,' let array value: ',letVal)
-
-                    testCount = letVal.count("'")
-                    if testCount == 0:
-                        testCount = letVal.count('"')
-
-                    if testCount > 2:
+                    if "\\" in letVal:
                         letVal = letVal[1:-1]
 
                         tempArray = []
-                        currentIndex = -1
-                        for x in range(len(letVal)):
-                            char = letVal[x]
-
-                            if currentIndex > x:
-                                continue
-                            elif currentIndex == x:
-                                currentIndex = -1
-
-                            if char == "'":
-                                if currentIndex == -1:
-                                    currentIndex = x
-
-                            elif currentIndex != -1:
-                                start = currentIndex + 1
-                                end = letVal.index("'", start)
-
-                                tempArray.append(letVal[start:end])
-                                currentIndex = end + 1
+                        for char in letVal:
+                            if char != "\\":
+                                tempArray.append("\\" + char)
 
                     else:
-                        letVal = letVal[1:-1]
+                        tempArray = []
+                        for char in letVal:
+                            if char != "'" and char != '"':
+                                tempArray.append(char)
 
-                        if "\\" in letVal:
-                            letVal = letVal[1:-1]
+            letVal = tempArray
 
-                            tempArray = []
-                            for char in letVal:
-                                if char != "\\":
-                                    tempArray.append("\\" + char)
+        l[let[0].strip()] = letVal
 
-                        else:
-                            tempArray = []
-                            for char in letVal:
-                                if char != "'" and char != '"':
-                                    tempArray.append(char)
+    # diccionario de reglas de formato rule
+    for rule in rules:
+        #print(' - ', rule ,' rule value: ')
+        rule = rule.replace("rule ", "")
+        if "return" in rule:
+            start = rule.index("{")
+            end = rule.index("}")
+            returnVal = rule[start + 1:end].strip() + rule[end + 1:].strip()
 
-                letVal = tempArray
-
-            l[let[0].strip()] = letVal
-
-        # diccionario de reglas de formato rule
-        for rule in rules:
-            #print(' - ', rule ,' rule value: ')
-            rule = rule.replace("rule ", "")
-            if "return" in rule:
-                start = rule.index("{")
-                end = rule.index("}")
-                returnVal = rule[start + 1:end].strip() + rule[end + 1:].strip()
-
-                if "'" in rule:
-                    start = rule.index("'")
-                    end = rule.index("'", start + 1)
-                    ruleName = rule[start + 1:end].strip()
-                else:
-                    start = 0
-                    if "|" in rule:
-                        start = rule.index("|") + 1
-
-                    end = rule.index("{")
-                    ruleName = rule[start:end].strip()
-                r[ruleName] = returnVal
+            if "'" in rule:
+                start = rule.index("'")
+                end = rule.index("'", start + 1)
+                ruleName = rule[start + 1:end].strip()
             else:
-                r[rule.strip()] = ""
+                start = 0
+                if "|" in rule:
+                    start = rule.index("|") + 1
 
-        repeated_rule(r, l)
+                end = rule.index("{")
+                ruleName = rule[start:end].strip()
+            r[ruleName] = returnVal
+        else:
+            r[rule.strip()] = ""
 
-        return l, r
+    repeated_rule(r, l)
+
+    return l, r
 
 
 # generar el alfabeto a partir de las reglas let y rule
@@ -440,7 +439,7 @@ def parser(regexStack, lets, sigma):
     for val in regexStack:
         #print("val: ", val)
         if val not in lets:
-            val = val.strip("'")
+            #val = val.strip("'")
             regex += val
             regex2.append(val)
         else:
@@ -497,3 +496,65 @@ def parser(regexStack, lets, sigma):
     print("Regex: ", regex)
     
     return regex2, sigma
+
+def updateSigma(regex, sigma):
+    logic_operators = ['|', '*', "'.'", '(', ')', '+', '?']
+    for e in regex:
+        if e not in sigma and e not in logic_operators:
+            sigma.append(e)
+    return sigma
+
+
+def PreprocessEntry(s, sigma):
+    valid = True
+    limit = len(s)
+    i = 0
+    while i < limit:
+        e = s[i]
+        if s[i] not in sigma:
+            temp = str(ord(s[i]))
+            if temp not in sigma:
+                temp = "'" + temp + "'"
+                if temp not in sigma:
+                    valid = False
+                    #sigma.append(temp)
+                else:
+                    #s[i] = temp
+                    s, i, limit = StitchTogether(s, temp, i, limit)
+            else:
+                #s[i] = temp
+                s, i, limit = StitchTogether(s, temp, i, limit)
+        else:
+            i += 1
+
+    return s, valid
+
+def StitchTogether(vest, patch, where, limit):
+    vest1 = vest[:where]
+    #print('vest1: ', vest1)
+    vest2 = vest[where+1:]
+    #print('vest2: ', vest2)
+    vest = vest1 + patch + vest2
+    where += len(patch) 
+    limit += len(patch) - 1
+    return vest, where, limit
+
+
+"""gary = '+'
+print('gary: ', gary)
+print('gary: ', str(ord(gary)))
+gary = "'" + str(ord(gary)) + "'"
+print('gary: ', gary)
+
+dummy = "Vex'ahlia Vessar"
+where = 10
+print('dummy: ', dummy)
+print('dummy: ', dummy[where:])
+for e in dummy:
+    print(' - ', e)
+married = 'de Rolo V'
+dummy, where = StitchTogether(dummy,married , where)
+print('dummy: ', dummy)
+print('dummy: ', dummy[where:])
+for e in dummy:
+    print(' - ', e)"""
